@@ -16,12 +16,14 @@ fi
 # Check if Python is available
 if ! command -v python3 &> /dev/null; then
     echo "❌ Python 3 is required but not installed."
+    echo "[+] Please install Python 3.7 or higher from https://www.python.org/"
     exit 1
 fi
 
 # Check if Node.js is available
 if ! command -v node &> /dev/null; then
     echo "❌ Node.js is required but not installed."
+    echo "[+] Please install Node.js (version 14 or higher) from https://nodejs.org/"
     exit 1
 fi
 
@@ -41,11 +43,28 @@ fi
 
 echo "✅ Prerequisites check passed (using $NODE_MANAGER)"
 
+# Set up Python virtual environment and install dependencies
+echo "📦 Setting up Python virtual environment..."
+cd backend
+
+# Create virtual environment if it doesn't exist
+if [ ! -d "venv" ]; then
+    echo "🔧 Creating Python virtual environment..."
+    python3 -m venv .venv
+    if [ $? -ne 0 ]; then
+        echo "❌ Failed to create virtual environment"
+        exit 1
+    fi
+fi
+
+# Activate virtual environment
+echo "🔌 Activating virtual environment..."
+source .venv/bin/activate
+
 # Install Python dependencies
 echo "📦 Installing Python dependencies..."
-cd backend
 if [ -f "requirements.txt" ]; then
-    pip3 install -r requirements.txt
+    pip install -r requirements.txt
     if [ $? -ne 0 ]; then
         echo "❌ Failed to install Python dependencies"
         exit 1
@@ -101,7 +120,9 @@ trap cleanup SIGINT SIGTERM
 
 # Start the API server in background
 echo "🔧 Starting Python API server (port 5000)..."
-python3 api.py &
+cd backend
+source venv/bin/activate
+python api.py &
 API_PID=$!
 
 # Wait a moment for API to start

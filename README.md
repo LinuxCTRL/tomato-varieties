@@ -1,16 +1,46 @@
 # 🍅 Tomato Varieties Database
 
-A comprehensive web application that scrapes, stores, and serves tomato variety information from the Rutgers NJAES database. Built with Python (Flask) backend and Express.js frontend.
+A comprehensive, modern web application that scrapes, stores, and serves detailed tomato variety information from the Rutgers NJAES database. Built with Python (Flask) backend and Express.js frontend, featuring a beautiful UI with dark mode, loading animations, and one-click data scraping.
 
-## 🌟 Features
+## ✨ Features
 
-- **Web Scraping**: Automatically scrapes tomato variety data from [Rutgers NJAES](https://njaes.rutgers.edu/tomato-varieties/)
-- **REST API**: Python Flask backend serving JSON data
-- **Web Interface**: Express.js frontend with responsive design
-- **Search Functionality**: Search varieties by name, characteristics, or growing information
-- **Dynamic Routing**: Individual pages for each tomato variety (`/tomato/:name`)
-- **Statistics Dashboard**: Overview of database contents and data quality
-- **Real-time Updates**: Refresh data without restarting the application
+### 🎨 **Modern UI & UX**
+
+- **Beautiful Design**: Custom OperatorMono font with glassmorphism effects
+- **Dark Mode**: Smooth toggle between light and dark themes with persistent preferences
+- **Loading Animations**: Growing plant animations (🌱→🌿→🍃→🍅) throughout the app
+- **Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
+- **Smooth Transitions**: CSS animations with GPU acceleration for buttery performance
+
+### 🚀 **Advanced Scraping**
+
+- **Multithreaded Scraper**: 4-8x faster scraping with configurable thread count
+- **Progress Bars**: Beautiful tqdm progress indicators with real-time stats
+- **Rich Data Extraction**: Comprehensive variety information including:
+  - Tomato Type (Heirloom, Garden, Cherry, etc.)
+  - Breed (Open Pollinated, Hybrid)
+  - Origin (Country/Region)
+  - Season (Early, Mid, Late)
+  - Plant Details (Height, Type, Leaf Type)
+  - Fruit Characteristics (Size, Shape, Colors)
+  - Growing Information (Days to maturity, Disease resistance)
+- **One-Click Scraping**: Start scraper directly from the web interface
+
+### 🔧 **Powerful Backend**
+
+- **REST API**: Python Flask backend with comprehensive endpoints
+- **Smart Caching**: Efficient data loading and caching mechanisms
+- **Background Processing**: Non-blocking scraper execution
+- **Status Monitoring**: Real-time scraper status checking
+- **Error Handling**: Graceful error recovery and user feedback
+
+### 🌐 **Rich Frontend**
+
+- **Express.js Server**: Fast, reliable web server
+- **Search Functionality**: Advanced search across all variety data
+- **Dynamic Routing**: Individual pages for each tomato variety
+- **Statistics Dashboard**: Comprehensive database analytics
+- **Real-time Updates**: Refresh data without restarting
 
 ## 🚀 Quick Start
 
@@ -18,74 +48,132 @@ A comprehensive web application that scrapes, stores, and serves tomato variety 
 
 - Python 3.7+
 - Node.js 14+
-- npm or yarn
+- npm, yarn, or bun (recommended)
+- pip (Python package installer)
 
-### Easy Setup (Recommended)
+### 🎯 **One-Command Setup (Recommended)**
 
 ```bash
-# Make the startup script executable and run it
+# Clone and start everything automatically
+git clone https://github.com/LinuxCTRL/tomato-varieties
+cd tomato-varieties
 chmod +x start.sh
 ./start.sh
 ```
 
-This will:
-1. Install all dependencies
-2. Run the scraper to get initial data
-3. Start both servers
-4. Open the application at http://localhost:3000
+**That's it!** The script will:
 
-### Manual Setup
+- ✅ Install all Python and Node.js dependencies
+- ✅ Run the scraper to fetch initial data (if needed)
+- ✅ Start both backend and frontend servers
+- ✅ Display helpful information and URLs
 
-1. **Install Python dependencies:**
+### 🔧 **Manual Setup (Alternative)**
+
+1. **Set up Python virtual environment:**
+
+**Linux/macOS:**
+
 ```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-2. **Install Node.js dependencies:**
-```bash
-npm install
+**Windows (Command Prompt):**
+
+```cmd
+cd backend
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-3. **Run the scraper to get data:**
-```bash
-python scraper.py
+**Windows (PowerShell):**
+
+```powershell
+cd backend
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
 ```
 
-4. **Start the API server:**
+2. **Install frontend dependencies:**
+
 ```bash
+cd ../frontend
+npm install  # or bun install (recommended)
+```
+
+3. **Start the backend API:**
+
+**Linux/macOS:**
+
+```bash
+cd ../backend
+source venv/bin/activate
 python api.py
 ```
 
-5. **Start the frontend server (in another terminal):**
-```bash
-npm start
+**Windows:**
+
+```cmd
+cd ..\backend
+venv\Scripts\activate
+python api.py
 ```
 
-6. **Access the application:**
-- Frontend: http://localhost:3000
-- API: http://localhost:5000
+4. **Start the frontend server (in another terminal):**
+
+```bash
+cd frontend
+npm start  # or bun start
+```
+
+5. **Access the application:**
+
+- 🌐 **Frontend**: http://localhost:3000
+- 🔧 **API**: http://localhost:5000
+
+### 🎉 **First Time Usage**
+
+1. **Click "Scrape Fresh Data"** button to fetch tomato varieties
+2. **Toggle dark mode** 🌙 with the switch in the top-right corner
+3. **Search varieties** using the search bar or dedicated search page
+4. **Explore variety details** by clicking on any tomato card
+5. **Watch the beautiful growing plant animations** 🌱→🌿→🍃→🍅
 
 ## 📁 Project Structure
 
 ```
 tomato-varieties-database/
-├── scraper.py              # Web scraper for tomato data
-├── api.py                  # Flask REST API server
-├── server.js               # Express.js frontend server
-├── start.sh                # Startup script
-├── package.json            # Node.js dependencies
-├── requirements.txt        # Python dependencies
-├── tomato_varieties.json   # Scraped data (generated)
-├── views/                  # EJS templates
-│   ├── layout.ejs         # Base layout
-│   ├── index.ejs          # Home page
-│   ├── variety-detail.ejs # Individual variety page
-│   ├── search.ejs         # Search page
-│   ├── stats.ejs          # Statistics page
-│   └── error.ejs          # Error page
-└── public/                 # Static assets
-    ├── css/style.css      # Custom styles
-    └── js/app.js          # Frontend JavaScript
+├── 🚀 start.sh                    # Main startup script
+├── 📁 backend/                    # Python backend
+│   ├── 🐍 api.py                 # Flask REST API server
+│   ├── 🍅 scraper.py             # Multithreaded web scraper
+│   ├── 📄 tomato_varieties.json  # Scraped data (generated)
+│   ├── 📋 requirements.txt       # Python dependencies
+│   └── 🔧 start.sh              # Backend-only startup script
+├── 📁 frontend/                   # Node.js frontend
+│   ├── 🌐 server.js              # Express.js web server
+│   ├── 📋 package.json           # Node.js dependencies
+│   ├── 📁 views/                 # EJS templates
+│   │   ├── layout.ejs           # Base layout with dark mode
+│   │   ├── index.ejs            # Home page with scrape button
+│   │   ├── variety-detail.ejs   # Individual variety page
+│   │   ├── search.ejs           # Advanced search page
+│   │   ├── stats.ejs            # Statistics dashboard
+│   │   ├── loading-demo.ejs     # Animation showcase
+│   │   └── error.ejs            # Error page
+│   └── 📁 public/                # Static assets
+│       ├── 📁 css/
+│       │   └── style.css        # Modern UI with glassmorphism
+│       ├── 📁 js/
+│       │   └── app.js           # Frontend logic & animations
+│       └── 📁 fonts/
+│           └── OperatorMonoLig-Book.otf  # Premium font
+└── 📚 README.md                   # This file
 ```
 
 ## 🔧 API Endpoints
@@ -110,12 +198,14 @@ tomato-varieties-database/
 ## 🎯 Usage Examples
 
 ### Scraping Data
+
 ```bash
 # Scrape fresh data from Rutgers website
 python scraper.py
 ```
 
 ### API Usage
+
 ```bash
 # Get all varieties
 curl http://localhost:5000/varieties
@@ -198,3 +288,25 @@ This project is licensed under the MIT License.
 
 - Data source: [Rutgers NJAES Tomato Varieties](https://njaes.rutgers.edu/tomato-varieties/)
 - Built with Flask, Express.js, Bootstrap, and Font Awesome
+
+## 🔧 Development Notes
+
+### Virtual Environment
+
+- The project uses Python virtual environment (`venv`) for dependency isolation
+- Virtual environment is automatically created and activated by `start.sh`
+- For manual development, always activate the venv: `source backend/venv/bin/activate`
+
+### Adding New Dependencies
+
+```bash
+# Backend (Python)
+cd backend
+source venv/bin/activate
+pip install -qqq new-package
+pip freeze > requirements.txt
+
+# Frontend (Node.js)
+cd frontend
+npm install new-package  # or bun add new-package
+```
