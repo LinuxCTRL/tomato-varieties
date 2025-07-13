@@ -1,0 +1,194 @@
+<% 
+const title = 'Search - Tomato Varieties Database';
+const body = `
+<div class="row">
+    <div class="col-12">
+        <h1 class="display-4 mb-4">
+            <i class="fas fa-search text-primary me-3"></i>
+            Search Tomato Varieties
+        </h1>
+        
+        <!-- Search Form -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form action="/search" method="GET">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <input type="text" class="form-control form-control-lg" name="q" 
+                                   placeholder="Search by variety name, description, or characteristics..." 
+                                   value="${query}" autofocus>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary btn-lg w-100" onclick="showSearchLoading()">
+                                <i class="fas fa-search me-1"></i>
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        ${query ? `
+            <!-- Search Results -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>
+                    <i class="fas fa-list-ul me-2"></i>
+                    Search Results
+                </h2>
+                <span class="badge bg-primary fs-6">
+                    ${totalFound} result${totalFound !== 1 ? 's' : ''} for "${query}"
+                </span>
+            </div>
+            
+            ${error ? `
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Search Error</h4>
+                    <p class="mb-0">${error}</p>
+                </div>
+            ` : ''}
+            
+            ${totalFound === 0 && !error ? `
+                <div class="alert alert-warning" role="alert">
+                    <h4 class="alert-heading">No Results Found</h4>
+                    <p>No tomato varieties found matching "${query}".</p>
+                    <hr>
+                    <p class="mb-0">
+                        Try searching with different keywords or 
+                        <a href="/" class="alert-link">browse all varieties</a>.
+                    </p>
+                </div>
+            ` : ''}
+            
+            ${results && results.length > 0 ? `
+                <div class="row">
+                    ${results.map(variety => `
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card h-100 variety-card" onclick="window.location.href='/tomato/${encodeURIComponent(variety.slug || variety.name)}'">
+                                <div class="card-body">
+                                    <h5 class="card-title text-success">
+                                        <i class="fas fa-pepper-hot me-2"></i>
+                                        ${variety.name}
+                                    </h5>
+                                    
+                                    ${variety.description ? `
+                                        <p class="card-text text-muted">
+                                            ${variety.description}
+                                        </p>
+                                    ` : ''}
+                                    
+                                    ${variety.relevance_score > 1 ? `
+                                        <div class="mb-2">
+                                            <span class="badge bg-info">
+                                                <i class="fas fa-star me-1"></i>
+                                                High relevance
+                                            </span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                                
+                                <div class="card-footer bg-transparent">
+                                    <small class="text-success">
+                                        <i class="fas fa-arrow-right me-1"></i>
+                                        Click for details
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            ` : ''}
+        ` : `
+            <!-- Search Tips -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-lightbulb me-2"></i>
+                                Search Tips
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Search by variety name (e.g., "Cherokee Purple")
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Search by characteristics (e.g., "determinate")
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Search by growing info (e.g., "80 days")
+                                </li>
+                                <li class="mb-0">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Use partial words for broader results
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-rocket me-2"></i>
+                                Quick Actions
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <a href="/" class="btn btn-outline-success">
+                                    <i class="fas fa-list me-2"></i>
+                                    Browse All Varieties
+                                </a>
+                                <a href="/stats" class="btn btn-outline-info">
+                                    <i class="fas fa-chart-bar me-2"></i>
+                                    View Statistics
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `}
+    </div>
+</div>
+`;
+%>
+
+<%- include('layout', { title, body }) %>
+
+<script>
+function showSearchLoading() {
+    // Show beautiful growing plant animation while searching
+    if (typeof showLoadingOverlay === "function") {
+        showLoadingOverlay("plant", "Growing search results...");
+    }
+    
+    // Hide loading after form submission (page will reload)
+    setTimeout(() => {
+        if (typeof hideLoadingOverlay === "function") {
+            hideLoadingOverlay();
+        }
+    }, 1000);
+}
+
+// Add loading animation to search form submission
+document.addEventListener("DOMContentLoaded", function() {
+    const searchForm = document.querySelector("form[action=\"/search\"]");
+    if (searchForm) {
+        searchForm.addEventListener("submit", function(e) {
+            const query = this.querySelector("input[name=\"q\"]").value.trim();
+            if (query) {
+                showSearchLoading();
+            }
+        });
+    }
+});
+</script>
+

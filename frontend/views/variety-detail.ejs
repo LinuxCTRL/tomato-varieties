@@ -1,0 +1,250 @@
+<% 
+const title = `${variety.name} - Tomato Varieties Database`;
+const body = `
+<div class="row">
+    <div class="col-12">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/">
+                        <i class="fas fa-home me-1"></i>
+                        Home
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    ${variety.name}
+                </li>
+            </ol>
+        </nav>
+        
+        <!-- Variety Header -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="display-4 text-success">
+                    <i class="fas fa-pepper-hot me-3"></i>
+                    ${variety.name}
+                </h1>
+                
+                ${variety.page_title && variety.page_title !== variety.name ? `
+                    <p class="lead text-muted">${variety.page_title}</p>
+                ` : ''}
+                
+                ${variety.description ? `
+                    <div class="alert alert-light border-success">
+                        <h5 class="alert-heading">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Description
+                        </h5>
+                        <p class="mb-0">${variety.description}</p>
+                    </div>
+                ` : ''}
+            </div>
+            
+            <div class="col-md-4">
+                ${variety.images && variety.images.length > 0 ? `
+                    <div class="card">
+                        <img src="${variety.images[0].url}" class="card-img-top" alt="${variety.images[0].alt || variety.name}" 
+                             style="height: 200px; object-fit: cover;">
+                        ${variety.images[0].alt ? `
+                            <div class="card-body p-2">
+                                <small class="text-muted">${variety.images[0].alt}</small>
+                            </div>
+                        ` : ''}
+                    </div>
+                ` : `
+                    <div class="card bg-light">
+                        <div class="card-body text-center py-5">
+                            <i class="fas fa-image fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No image available</p>
+                        </div>
+                    </div>
+                `}
+            </div>
+        </div>
+        
+        <!-- Growing Information -->
+        ${Object.keys(variety.growing_info || {}).length > 0 ? `
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-seedling me-2"></i>
+                        Growing Information
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        ${Object.entries(variety.growing_info).map(([key, value]) => `
+                            <div class="col-md-4 mb-3">
+                                <div class="border rounded p-3 h-100">
+                                    <h6 class="text-success text-uppercase">
+                                        ${key.replace(/_/g, ' ')}
+                                    </h6>
+                                    <p class="mb-0 fw-bold">${value}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        ` : ''}
+        
+        <!-- Characteristics -->
+        ${Object.keys(variety.characteristics || {}).length > 0 ? `
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-list-ul me-2"></i>
+                        Characteristics
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <tbody>
+                                ${Object.entries(variety.characteristics).map(([key, value]) => `
+                                    <tr>
+                                        <td class="fw-bold text-capitalize" style="width: 30%;">
+                                            ${key.replace(/_/g, ' ')}
+                                        </td>
+                                        <td>${value}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        ` : ''}
+        
+        <!-- Additional Images -->
+        ${variety.images && variety.images.length > 1 ? `
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-images me-2"></i>
+                        Additional Images
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        ${variety.images.slice(1).map(image => `
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <img src="${image.url}" class="card-img-top" alt="${image.alt || variety.name}" 
+                                         style="height: 200px; object-fit: cover;">
+                                    ${image.alt ? `
+                                        <div class="card-body p-2">
+                                            <small class="text-muted">${image.alt}</small>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        ` : ''}
+        
+        <!-- Source Information -->
+        <div class="card mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-external-link-alt me-2"></i>
+                    Source Information
+                </h4>
+            </div>
+            <div class="card-body">
+                <p class="mb-2">
+                    <strong>Original Source:</strong> 
+                    <a href="${variety.url}" target="_blank" class="text-decoration-none">
+                        ${variety.url}
+                        <i class="fas fa-external-link-alt ms-1"></i>
+                    </a>
+                </p>
+                <p class="mb-0">
+                    <strong>Database:</strong> 
+                    <a href="https://njaes.rutgers.edu/tomato-varieties/" target="_blank" class="text-decoration-none">
+                        Rutgers NJAES Tomato Varieties
+                        <i class="fas fa-external-link-alt ms-1"></i>
+                    </a>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Raw Text (Collapsible) -->
+        ${variety.raw_text ? `
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <button class="btn btn-link text-decoration-none p-0" type="button" 
+                                data-bs-toggle="collapse" data-bs-target="#rawTextCollapse">
+                            <i class="fas fa-file-text me-2"></i>
+                            Full Text Content
+                            <i class="fas fa-chevron-down ms-2"></i>
+                        </button>
+                    </h4>
+                </div>
+                <div id="rawTextCollapse" class="collapse">
+                    <div class="card-body">
+                        <pre class="text-wrap">${variety.raw_text}</pre>
+                    </div>
+                </div>
+            </div>
+        ` : ''}
+        
+        <!-- Action Buttons -->
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <a href="/" class="btn btn-success me-2">
+                    <i class="fas fa-arrow-left me-1"></i>
+                    Back to All Varieties
+                </a>
+                <a href="/search" class="btn btn-outline-success">
+                    <i class="fas fa-search me-1"></i>
+                    Search Other Varieties
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+`;
+%>
+
+<%- include('layout', { title, body }) %>
+
+<script>
+// Add growing plant loading animation to variety detail page links
+document.addEventListener("DOMContentLoaded", function() {
+    // Add loading to all variety navigation links
+    const varietyLinks = document.querySelectorAll("a[href^=\"/tomato/\"]");
+    varietyLinks.forEach(link => {
+        link.addEventListener("click", function(e) {
+            if (typeof showLoadingOverlay === "function") {
+                showLoadingOverlay("plant", "Loading variety details...");
+            }
+        });
+    });
+    
+    // Add loading to breadcrumb home link
+    const homeLink = document.querySelector("a[href=\"/\"]");
+    if (homeLink) {
+        homeLink.addEventListener("click", function(e) {
+            if (typeof showLoadingOverlay === "function") {
+                showLoadingOverlay("plant", "Growing tomato garden...");
+            }
+        });
+    }
+    
+    // Add loading to search links
+    const searchLinks = document.querySelectorAll("a[href^=\"/search\"]");
+    searchLinks.forEach(link => {
+        link.addEventListener("click", function(e) {
+            if (typeof showLoadingOverlay === "function") {
+                showLoadingOverlay("plant", "Growing search results...");
+            }
+        });
+    });
+});
+</script>
+

@@ -1,0 +1,256 @@
+<% 
+const title = 'Loading Animations Demo - Tomato Varieties Database';
+const body = `
+<div class="row">
+    <div class="col-12">
+        <h1 class="display-4 text-center mb-5">
+            <i class="fas fa-spinner me-3"></i>
+            Amazing Loading Animations
+        </h1>
+        
+        <div class="row">
+            <!-- Bouncing Tomato Spinner -->
+            <div class="col-lg-4 col-md-6 mb-5">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">🍅 Bouncing Tomato</h5>
+                        <div class="tomato-spinner"></div>
+                        <p class="card-text">Perfect for quick loading states</p>
+                        <button class="btn btn-primary" onclick="showLoader('tomato')">Test It</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Growing Plant Animation -->
+            <div class="col-lg-4 col-md-6 mb-5">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">🌱 Growing Plant</h5>
+                        <div class="plant-loader">
+                            <span class="plant-stage">🌱</span>
+                            <span class="plant-stage">🌿</span>
+                            <span class="plant-stage">🍃</span>
+                            <span class="plant-stage">🍅</span>
+                        </div>
+                        <p class="card-text">Great for data processing</p>
+                        <button class="btn btn-success" onclick="showLoader('plant')">Test It</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Water Ripple Effect -->
+            <div class="col-lg-4 col-md-6 mb-5">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">💧 Water Ripple</h5>
+                        <div class="water-ripple">
+                            <div class="ripple-circle"></div>
+                            <div class="ripple-circle"></div>
+                            <div class="ripple-circle"></div>
+                        </div>
+                        <p class="card-text">Perfect for refresh actions</p>
+                        <button class="btn btn-info" onclick="showLoader('ripple')">Test It</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tomato Progress Bar -->
+            <div class="col-lg-4 col-md-6 mb-5">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">📊 Tomato Progress</h5>
+                        <div class="tomato-progress">
+                            <div class="tomato-progress-fill"></div>
+                        </div>
+                        <p class="card-text">Ideal for file uploads</p>
+                        <button class="btn btn-warning" onclick="showLoader('progress')">Test It</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Floating Tomatoes -->
+            <div class="col-lg-4 col-md-6 mb-5">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">🎪 Floating Tomatoes</h5>
+                        <div class="floating-tomatoes">
+                            <div class="floating-tomato">🍅</div>
+                            <div class="floating-tomato">🍅</div>
+                            <div class="floating-tomato">🍅</div>
+                            <div class="floating-tomato">🍅</div>
+                        </div>
+                        <p class="card-text">Fun for long operations</p>
+                        <button class="btn btn-danger" onclick="showLoader('floating')">Test It</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Skeleton Loaders -->
+            <div class="col-lg-4 col-md-6 mb-5">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">💀 Skeleton Cards</h5>
+                        <div class="skeleton-card">
+                            <div class="skeleton-line title"></div>
+                            <div class="skeleton-line subtitle"></div>
+                            <div class="skeleton-line content"></div>
+                            <div class="skeleton-line short"></div>
+                        </div>
+                        <p class="card-text">Perfect for content loading</p>
+                        <button class="btn btn-secondary" onclick="showSkeletonDemo()">Test It</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Integration Examples -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h2 class="text-center mb-4">🚀 Integration Examples</h2>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Scraper Loading</h5>
+                                <p class="card-text">Show progress while scraping tomato varieties</p>
+                                <button class="btn btn-primary" onclick="simulateScraping()">
+                                    <i class="fas fa-download me-2"></i>
+                                    Start Scraping
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Search Loading</h5>
+                                <p class="card-text">Animate while searching varieties</p>
+                                <button class="btn btn-success" onclick="simulateSearch()">
+                                    <i class="fas fa-search me-2"></i>
+                                    Search Varieties
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div id="loaderContent">
+        <!-- Dynamic loader content will be inserted here -->
+    </div>
+    <div class="loading-text" id="loadingText">Loading...</div>
+</div>
+
+<script>
+// Loading Animation Functions
+function showLoader(type) {
+    const overlay = document.getElementById('loadingOverlay');
+    const content = document.getElementById('loaderContent');
+    const text = document.getElementById('loadingText');
+    
+    // Clear previous content
+    content.innerHTML = '';
+    
+    switch(type) {
+        case 'tomato':
+            content.innerHTML = '<div class="tomato-spinner"></div>';
+            text.textContent = 'Processing tomato data...';
+            break;
+        case 'plant':
+            content.innerHTML = \`
+                <div class="plant-loader">
+                    <span class="plant-stage">🌱</span>
+                    <span class="plant-stage">🌿</span>
+                    <span class="plant-stage">🍃</span>
+                    <span class="plant-stage">🍅</span>
+                </div>
+            \`;
+            text.textContent = 'Growing your tomato garden...';
+            break;
+        case 'ripple':
+            content.innerHTML = \`
+                <div class="water-ripple">
+                    <div class="ripple-circle"></div>
+                    <div class="ripple-circle"></div>
+                    <div class="ripple-circle"></div>
+                </div>
+            \`;
+            text.textContent = 'Refreshing data...';
+            break;
+        case 'progress':
+            content.innerHTML = \`
+                <div class="tomato-progress">
+                    <div class="tomato-progress-fill"></div>
+                </div>
+            \`;
+            text.textContent = 'Uploading tomato varieties...';
+            break;
+        case 'floating':
+            content.innerHTML = \`
+                <div class="floating-tomatoes">
+                    <div class="floating-tomato">🍅</div>
+                    <div class="floating-tomato">🍅</div>
+                    <div class="floating-tomato">🍅</div>
+                    <div class="floating-tomato">🍅</div>
+                </div>
+            \`;
+            text.textContent = 'Harvesting tomatoes...';
+            break;
+    }
+    
+    overlay.classList.add('active');
+    
+    // Hide after 3 seconds
+    setTimeout(() => {
+        overlay.classList.remove('active');
+    }, 3000);
+}
+
+function showSkeletonDemo() {
+    // Replace current cards with skeleton loaders temporarily
+    const cards = document.querySelectorAll('.card-body');
+    const originalContent = [];
+    
+    cards.forEach((card, index) => {
+        originalContent[index] = card.innerHTML;
+        card.innerHTML = \`
+            <div class="skeleton-line title"></div>
+            <div class="skeleton-line subtitle"></div>
+            <div class="skeleton-line content"></div>
+            <div class="skeleton-line short"></div>
+        \`;
+    });
+    
+    // Restore after 3 seconds
+    setTimeout(() => {
+        cards.forEach((card, index) => {
+            card.innerHTML = originalContent[index];
+        });
+    }, 3000);
+}
+
+function simulateScraping() {
+    showLoader('plant');
+    setTimeout(() => {
+        alert('🎉 Scraping completed! Found 1,341 tomato varieties!');
+    }, 3000);
+}
+
+function simulateSearch() {
+    showLoader('ripple');
+    setTimeout(() => {
+        alert('🔍 Search completed! Found 25 matching varieties!');
+    }, 3000);
+}
+</script>
+`;
+%>
+
+<%- include('layout', { title, body }) %>

@@ -1,0 +1,187 @@
+<% 
+const title = 'Statistics - Tomato Varieties Database';
+const body = `
+<div class="row">
+    <div class="col-12">
+        <h1 class="display-4 mb-4">
+            <i class="fas fa-chart-bar text-info me-3"></i>
+            Database Statistics
+        </h1>
+        
+        <!-- Overview Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center">
+                        <i class="fas fa-seedling fa-2x mb-2"></i>
+                        <h3>${stats.total_varieties}</h3>
+                        <p class="mb-0">Total Varieties</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body text-center">
+                        <i class="fas fa-images fa-2x mb-2"></i>
+                        <h3>${stats.varieties_with_images}</h3>
+                        <p class="mb-0">With Images</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body text-center">
+                        <i class="fas fa-leaf fa-2x mb-2"></i>
+                        <h3>${stats.varieties_with_growing_info}</h3>
+                        <p class="mb-0">With Growing Info</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card bg-secondary text-white">
+                    <div class="card-body text-center">
+                        <i class="fas fa-percentage fa-2x mb-2"></i>
+                        <h3>${Math.round((stats.varieties_with_growing_info / stats.total_varieties) * 100)}%</h3>
+                        <p class="mb-0">Data Completeness</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Plant Types Distribution -->
+        ${Object.keys(stats.plant_types || {}).length > 0 ? `
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        Plant Types Distribution
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        ${Object.entries(stats.plant_types).map(([type, count]) => {
+                            const percentage = Math.round((count / stats.total_varieties) * 100);
+                            const colorClass = type === 'determinate' ? 'bg-success' : 
+                                              type === 'indeterminate' ? 'bg-info' : 'bg-secondary';
+                            return `
+                                <div class="col-md-4 mb-3">
+                                    <div class="card border-0">
+                                        <div class="card-body text-center">
+                                            <h5 class="text-capitalize">${type}</h5>
+                                            <div class="progress mb-2" style="height: 20px;">
+                                                <div class="progress-bar ${colorClass}" role="progressbar" 
+                                                     style="width: ${percentage}%" aria-valuenow="${percentage}" 
+                                                     aria-valuemin="0" aria-valuemax="100">
+                                                    ${percentage}%
+                                                </div>
+                                            </div>
+                                            <p class="mb-0">
+                                                <strong>${count}</strong> varieties
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            </div>
+        ` : ''}
+        
+        <!-- Data Source Information -->
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-database me-2"></i>
+                    Data Source Information
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Source Website:</h6>
+                        <p>
+                            <a href="${stats.source}" target="_blank" class="text-decoration-none">
+                                ${stats.source}
+                                <i class="fas fa-external-link-alt ms-1"></i>
+                            </a>
+                        </p>
+                        
+                        <h6>Last Updated:</h6>
+                        <p>${stats.scraped_at ? new Date(stats.scraped_at).toLocaleString() : 'Unknown'}</p>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h6>Data Quality:</h6>
+                        <ul class="list-unstyled">
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                ${stats.total_varieties} varieties scraped
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                ${stats.varieties_with_images} varieties have images
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                ${stats.varieties_with_growing_info} varieties have growing information
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <a href="/" class="btn btn-success me-2">
+                    <i class="fas fa-list me-1"></i>
+                    Browse All Varieties
+                </a>
+                <a href="/search" class="btn btn-outline-primary me-2">
+                    <i class="fas fa-search me-1"></i>
+                    Search Varieties
+                </a>
+                <button onclick="refreshStats()" class="btn btn-outline-info">
+                    <i class="fas fa-sync-alt me-1"></i>
+                    Refresh Stats
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function refreshStats() {
+    const button = event.target;
+    const originalText = button.innerHTML;
+    
+    button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Refreshing...';
+    button.disabled = true;
+    
+    try {
+        const response = await fetch('/api/refresh');
+        const data = await response.json();
+        
+        if (data.error) {
+            alert('Error: ' + data.error);
+        } else {
+            alert('Data refreshed successfully!');
+            location.reload();
+        }
+    } catch (error) {
+        alert('Failed to refresh data: ' + error.message);
+    } finally {
+        button.innerHTML = originalText;
+        button.disabled = false;
+    }
+}
+</script>
+`;
+%>
+
+<%- include('layout', { title, body }) %>
