@@ -112,7 +112,7 @@ npm install  # or bun install (recommended)
 
 ```bash
 cd ../backend
-source venv/bin/activate
+source .venv/bin/activate
 python api.py
 ```
 
@@ -120,7 +120,7 @@ python api.py
 
 ```cmd
 cd ..\backend
-venv\Scripts\activate
+.venv\Scripts\activate
 python api.py
 ```
 
@@ -311,25 +311,27 @@ cd frontend
 npm install new-package  # or bun add new-package
 ```
 
-
 ## 🪟 Windows Support
 
 ### Windows Users
+
 - Use `start.bat` instead of `start.sh` for one-command setup
 - Virtual environment activation: `venv\Scripts\activate`
 - Path separators: Use backslashes `\` instead of forward slashes `/`
 
 ### Cross-Platform Commands
-| Task | Linux/macOS | Windows |
-|------|-------------|---------|
-| Start everything | `./start.sh` | `start.bat` |
-| Activate venv | `source venv/bin/activate` | `venv\Scripts\activate` |
-| Navigate to backend | `cd backend` | `cd backend` |
-| Navigate up one level | `cd ..` | `cd ..` |
+
+| Task                  | Linux/macOS                | Windows                 |
+| --------------------- | -------------------------- | ----------------------- |
+| Start everything      | `./start.sh`               | `start.bat`             |
+| Activate venv         | `source venv/bin/activate` | `venv\Scripts\activate` |
+| Navigate to backend   | `cd backend`               | `cd backend`            |
+| Navigate up one level | `cd ..`                    | `cd ..`                 |
 
 ### PowerShell Users
+
 If using PowerShell, you may need to enable script execution:
+
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
-
